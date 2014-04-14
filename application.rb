@@ -1,16 +1,10 @@
 require 'sinatra/base'
-require 'bcrypt'
 require 'rack-flash'
 
 class Application < Sinatra::Application
 
   def initialize(app=nil)
     super(app)
-
-    # initialize any other instance variables for you
-    # application below this comment. One example would be repositories
-    # to store things in a database.
-
   end
 
   enable :sessions
@@ -40,13 +34,13 @@ class Application < Sinatra::Application
         redirect '/login'
       end
     else
-      user_email = UserRepository.create?(email_register, password_register)
-      if user_email
-      session[:email] = user_email
-      redirect '/'
-      else
+      if UserRepository.email_exists?(email_register)
         flash[:registration_error] = 'Email address is already taken'
         redirect '/register'
+      else
+        user_email = UserRepository.create(email_register, password_register)
+        session[:email] = user_email
+        redirect '/'
       end
     end
   end

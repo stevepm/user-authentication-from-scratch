@@ -9,28 +9,36 @@ class UserRepository
       @db = db[:users]
     end
 
-    def create?(email, password)
+    def create(email, password)
       password_hash = BCrypt::Password.create(password)
-      if self.find?(email)
-        false
-      else
+      user_email = nil
+      if !self.email_exists?(email)
         db.insert(:email => email, :password_hash => password_hash)
-        email
+        user_email = email
       end
+      user_email
     end
 
-    def find?(email)
+    def email_exists?(email)
+      exists = false
       if @db[:email => email]
+        exists = true
+      end
+      exists
+    end
+
+    def find(email)
+      if self.email_exists?(email)
         new(@db[:email => email])
       else
-        false
+        nil
       end
     end
 
     def validate_user?(email, password)
       valid = false
-      if self.find?(email)
-        password_hash = BCrypt::Password.new(self.find?(email).password)
+      if self.email_exists?(email)
+        password_hash = BCrypt::Password.new(self.find(email).password)
         if password_hash == password
           valid = true
         else
