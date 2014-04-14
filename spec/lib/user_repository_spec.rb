@@ -8,9 +8,22 @@ describe 'User Repository' do
   end
 
   it 'Stores username and password' do
-    id = UserRepository.create('joe@example.com', 'password')
-    expect(UserRepository.find(id).email).to eq('joe@example.com')
-    password_hash = BCrypt::Password.new(UserRepository.find(id).password)
+    email = UserRepository.create('joe@example.com', 'password')
+    expect(UserRepository.find?(email).email).to eq('joe@example.com')
+    password_hash = BCrypt::Password.new(UserRepository.find?(email).password)
     expect(password_hash).to eq('password')
+  end
+
+  it 'returns true if user is in db' do
+    email = UserRepository.create('joe@example.com', 'password')
+    expect(UserRepository.find?(email).email).to eq('joe@example.com')
+    expect(UserRepository.find?('joe@hotmail.com')).to eq(false)
+  end
+
+  it 'validates the user' do
+    email = UserRepository.create('joe@example.com', 'password')
+    expect(UserRepository.validate_user?(email, 'password')).to eq(true)
+    expect(UserRepository.validate_user?(email, 'some_stuff')).to eq(false)
+    expect(UserRepository.validate_user?('hotmail', 'some_stuff')).to eq(false)
   end
 end
