@@ -11,7 +11,22 @@ class Application < Sinatra::Application
 
   end
 
+  enable :sessions
+
   get '/' do
-    erb :index
+    session[:email] = nil unless session[:email]
+    erb :index, locals: {:email => session[:email]}
+  end
+
+  get '/register' do
+    erb :register
+  end
+
+  post '/' do
+    email = params[:Email]
+    password = params[:Password]
+    id = UserRepository.create(email,password)
+    session[:email] = UserRepository.find(id).email
+    redirect '/'
   end
 end
