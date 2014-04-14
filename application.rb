@@ -29,4 +29,9 @@ class Application < Sinatra::Application
     session[:email] = UserRepository.find(id).email
     redirect '/'
   end
+
+  get '/logout' do
+    session.clear
+    redirect '/'
+  end
 end
