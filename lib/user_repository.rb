@@ -9,10 +9,14 @@ class UserRepository
       @db = db[:users]
     end
 
-    def create(email, password)
+    def create?(email, password)
       password_hash = BCrypt::Password.create(password)
-      db.insert(:email => email, :password_hash => password_hash)
-      email
+      if self.find?(email)
+        false
+      else
+        db.insert(:email => email, :password_hash => password_hash)
+        email
+      end
     end
 
     def find?(email)

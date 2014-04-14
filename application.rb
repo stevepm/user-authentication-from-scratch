@@ -17,14 +17,13 @@ class Application < Sinatra::Application
   use Rack::Flash
 
   get '/' do
-    error_message = nil
-    error_message = flash[:error].now if flash[:error]
-    session[:email] = nil unless session[:email]
-    erb :index, locals: {:email => session[:email], :error_message => error_message}
+    erb :index, locals: {:email => session[:email]}
   end
 
   get '/register' do
-    erb :register
+    error_message = nil
+    error_message = flash.now[:registration_error] if flash[:registration_error]
+    erb :register, :locals => {:error_message => error_message}
   end
 
   post '/' do
@@ -41,9 +40,14 @@ class Application < Sinatra::Application
         redirect '/login'
       end
     else
-      user_email = UserRepository.create(email_register, password_register)
+      user_email = UserRepository.create?(email_register, password_register)
+      if user_email
       session[:email] = user_email
       redirect '/'
+      else
+        flash[:registration_error] = 'Email address is already taken'
+        redirect '/register'
+      end
     end
   end
 
