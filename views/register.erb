@@ -1,8 +1,17 @@
-<h1>Register</h1>
-<%= error_message %>
-<form action="<%= request.base_url %>" method="post">
-  Email: <input type="text" name="Email_register" placeholder="Email"><br/>
-  Password: <input type="password" name="Password_register" placeholder="Password"><br/>
-  <input type="submit" value="Register">
+<div class="form-wrapper">
 
-</form>
+
+
+
+  <form action="<%= request.base_url %>" method="post">
+    <table>
+      <tr><td></td><td><h1>Register</h1></td></tr>
+      <tr><td></td><td><p id="error"><%= error_message %></p></td></tr>
+      <tr><td>Email:</td> <td><input type="text" name="Email_register" placeholder="Email"></td></tr>
+      <tr><td>Password:</td> <td><input type="password" name="Password_register" placeholder="Password"></td></tr>
+      <tr><td></td><td><input type="submit" value="Register"></td></tr>
+    </table>
+
+
+  </form>
+</div>
