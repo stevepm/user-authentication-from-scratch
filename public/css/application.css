@@ -30,6 +30,7 @@ div.form-wrapper #error{
 }
 
 div.form-wrapper table{
+    border-collapse: inherit;
     margin-bottom: 20px;
     margin-top: 20px;
 }
