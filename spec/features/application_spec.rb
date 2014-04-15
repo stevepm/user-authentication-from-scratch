@@ -141,4 +141,19 @@ feature 'Homepage' do
     click_on 'Register'
     expect(page).to have_content "ERROR: Password can't be blank"
   end
+
+  scenario 'Gives error if email is not valid' do
+    visit '/'
+    click_on 'Register'
+    fill_in 'Email', with: '   '
+    fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
+    click_on 'Register'
+    expect(page).to have_content "ERROR: Email can't be blank"
+    fill_in 'Email', with: 'evan-tedesco'
+    fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
+    click_on 'Register'
+    expect(page).to have_content "ERROR: Email must be valid"
+  end
 end

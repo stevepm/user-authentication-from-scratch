@@ -36,7 +36,7 @@ class Application < Sinatra::Application
         redirect '/login'
       end
     else
-      if validate_password?(password_register,confirm_password)
+      if validate_password?(password_register,confirm_password) && validate_email?(email_register)
         if UserRepository.email_exists?(email_register)
           flash[:registration_error] = 'Email address is already taken'
           redirect '/register'
@@ -92,6 +92,19 @@ class Application < Sinatra::Application
     else
       valid = true
     end
+    valid
+  end
+
+  def validate_email?(email)
+    valid = false
+    if email.strip.empty?
+      flash[:registration_error] = "ERROR: Email can't be blank"
+    elsif (email =~ /^(\w\.*)+[@](\w)+\.([a-zA-Z]{2,6})$/) == nil
+      flash[:registration_error] = "ERROR: Email must be valid"
+    else
+      valid = true
+    end
+
     valid
   end
 end
