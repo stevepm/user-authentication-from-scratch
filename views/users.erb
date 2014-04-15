@@ -1,0 +1,20 @@
+<div class="users-wrapper">
+  <div id="header">
+    <div id="left"><a href="<%= request.base_url %>">Home</a></div>
+    <div id="right">Welcome, <%= email %> | <a href="<%= request.base_url %>/logout">Logout</a></div>
+  </div>
+
+  <h1>Users</h1>
+  <table id="users">
+    <tr>
+      <th>ID</th>
+      <th id="email">Email</th>
+    </tr>
+    <% users.each do |user| %>
+        <tr>
+          <td id="id"><%= user[:id] %></td>
+          <td id="email"><%= user[:email] %></td>
+        </tr>
+    <% end %>
+  </table>
+</div>

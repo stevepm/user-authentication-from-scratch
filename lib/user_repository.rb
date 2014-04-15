@@ -48,6 +48,9 @@ class UserRepository
 
       valid
     end
+    def list_users
+      db.to_a
+    end
   end
 
   attr_reader :id, :email, :password, :admin

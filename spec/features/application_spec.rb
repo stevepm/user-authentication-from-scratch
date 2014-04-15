@@ -68,4 +68,21 @@ feature 'Homepage' do
     expect(page).to have_content 'Invalid Email/Password'
   end
 
+  scenario 'Admin can see view users link' do
+    visit '/'
+    click_on 'Register'
+    fill_in 'Email', with: 'joe@example.com'
+    fill_in 'Password', with: 'Password'
+    click_on 'Register'
+    DB[:users].where(:email => 'joe@example.com').update(:admin => true)
+    click_on 'Logout'
+    click_on 'Login'
+    fill_in 'Email', with: 'joe@example.com'
+    fill_in 'Password', with: 'Password'
+    click_on 'Login'
+    expect(page).to have_link 'View all users'
+    click_on 'View all users'
+    expect(current_url).to eq("http://www.example.com/users")
+    expect(page).to have_content 'Users'
+  end
 end

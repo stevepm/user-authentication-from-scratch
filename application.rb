@@ -11,7 +11,7 @@ class Application < Sinatra::Application
   use Rack::Flash
 
   get '/' do
-    erb :index, locals: {:email => session[:email]}
+    erb :index, locals: {:email => session[:email], :admin => session[:admin]}
   end
 
   get '/register' do
@@ -28,6 +28,7 @@ class Application < Sinatra::Application
     if email_login && password_login
       if UserRepository.validate_user?(email_login, password_login)
         session[:email] = email_login
+        session[:admin] = UserRepository.find(email_login).admin
         redirect '/'
       else
         flash[:login_error] = 'Invalid Email/Password'
@@ -40,6 +41,7 @@ class Application < Sinatra::Application
       else
         user_email = UserRepository.create(email_register, password_register)
         session[:email] = user_email
+        session[:admin] = UserRepository.find(user_email).admin
         redirect '/'
       end
     end
@@ -54,5 +56,15 @@ class Application < Sinatra::Application
     error_message = nil
     error_message = flash.now[:login_error] if flash[:login_error]
     erb :login, :locals => {:error_message => error_message}
+  end
+
+  get '/users' do
+    if session[:admin]
+      users = UserRepository.list_users
+      email = session[:email]
+      erb :users, locals: {:users => users,:email => email}
+    else
+      redirect '/'
+    end
   end
 end

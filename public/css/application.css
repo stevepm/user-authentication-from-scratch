@@ -1,13 +1,13 @@
 body {
-    background-color: darkgrey;
+    background-color: white;
 }
 
 div.wrapper{
-    margin-top: 150px;
-    padding-left: 100px;
+    margin-top: 25px;
+    padding: 50px;
 }
-div.index-wrapper #nav{
-    word-spacing: 30px;
+div.index-wrapper #nav a{
+    padding-right: 30px;
 }
 
 div.index-wrapper h1{
@@ -38,3 +38,45 @@ div.form-wrapper td{
     width: 150px;
     padding-top: 25px;
 }
+
+div.users-wrapper{
+}
+
+div.users-wrapper table#users{
+    border: 2px solid black;
+}
+div.users-wrapper table#users th{
+    border: 2px solid black;
+    text-align: left;
+    background-color: darkgrey;
+}
+div.users-wrapper table#users td{
+    border-style: none solid;
+    padding-right: 15px;
+}
+
+div.users-wrapper table#users tr:nth-child(even){
+    background-color: lightgrey;
+}
+div.users-wrapper table#users td#id{
+    text-align: center;
+    padding-left: 5px;
+}
+
+div.users-wrapper th, tr{
+    border-left: 2px solid black;
+}
+div.users-wrapper th, td#email{
+    padding-left: 3px;
+}
+div.users-wrapper div#header{
+    width: 100%;
+    padding-bottom: 50px;
+}
+div.users-wrapper #left{
+    float: left;
+}
+div.users-wrapper #right{
+    float: right;
+}
+
