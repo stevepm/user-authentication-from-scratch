@@ -50,11 +50,12 @@ class UserRepository
     end
   end
 
-  attr_accessor :id, :email, :password
+  attr_reader :id, :email, :password, :admin
 
   def initialize(user)
     @id = user[:id]
     @email = user[:email]
     @password = user[:password_hash]
+    @admin = user[:admin]
   end
 end

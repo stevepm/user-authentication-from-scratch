@@ -31,4 +31,12 @@ describe 'User Repository' do
     expect(UserRepository.validate_user?(email, 'some_stuff')).to eq(false)
     expect(UserRepository.validate_user?('hotmail', 'some_stuff')).to eq(false)
   end
+
+  it 'Checks to see if a user is an admin' do
+    email = UserRepository.create('joe@example.com', 'password')
+    expect(UserRepository.find(email).admin).to eq(false)
+    DB[:users].where(:email => email).update(:admin => true)
+    expect(UserRepository.find(email).admin).to eq(true)
+
+  end
 end
