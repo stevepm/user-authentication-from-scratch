@@ -111,6 +111,7 @@ feature 'Homepage' do
     click_link 'here'
     expect(current_url).to eq("http://www.example.com/")
   end
+
   scenario 'Gives error if passwords dont match' do
     visit '/'
     click_on 'Register'
@@ -119,5 +120,15 @@ feature 'Homepage' do
     fill_in 'Confirm_Password', with: 'other-stuff'
     click_on 'Register'
     expect(page).to have_content 'ERROR: Passwords do not match'
+  end
+
+  scenario 'Gives error if password is less than 3 characters' do
+    visit '/'
+    click_on 'Register'
+    fill_in 'Email', with: 'joe@example.com'
+    fill_in 'Password', with: 'Pa'
+    fill_in 'Confirm_Password', with: 'Pa'
+    click_on 'Register'
+    expect(page).to have_content 'ERROR: Password must be at least 3 characters'
   end
 end

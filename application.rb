@@ -36,7 +36,7 @@ class Application < Sinatra::Application
         redirect '/login'
       end
     else
-      if confirm_password == password_register
+      if validate_password?(password_register,confirm_password)
         if UserRepository.email_exists?(email_register)
           flash[:registration_error] = 'Email address is already taken'
           redirect '/register'
@@ -47,7 +47,6 @@ class Application < Sinatra::Application
           redirect '/'
         end
       else
-        flash[:registration_error] = 'ERROR: Passwords do not match'
         redirect '/register'
       end
     end
@@ -80,5 +79,17 @@ class Application < Sinatra::Application
 
   not_found do
     redirect '/error'
+  end
+
+  def validate_password?(password,pwd_confirm)
+    valid = false
+    if password.length < 3
+      flash[:registration_error] = 'ERROR: Password must be at least 3 characters'
+    elsif password != pwd_confirm
+      flash[:registration_error] = 'ERROR: Passwords do not match'
+    else
+      valid = true
+    end
+    valid
   end
 end
