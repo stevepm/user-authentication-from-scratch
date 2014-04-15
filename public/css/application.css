@@ -1,3 +1,40 @@
 body {
-    background-color: orange;
+    background-color: darkgrey;
+}
+
+div.wrapper{
+    margin-top: 150px;
+    padding-left: 100px;
+}
+div.index-wrapper #nav{
+    word-spacing: 30px;
+}
+
+div.index-wrapper h1{
+    font-size: 5em;
+}
+
+div.form-wrapper{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.form-wrapper h1{
+    text-align: center;
+    font-size: 5em;
+}
+
+div.form-wrapper #error{
+    color: #b2091c;
+}
+
+div.form-wrapper table{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+div.form-wrapper td{
+    width: 150px;
+    padding-top: 25px;
 }
