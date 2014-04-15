@@ -83,7 +83,9 @@ class Application < Sinatra::Application
 
   def validate_password?(password,pwd_confirm)
     valid = false
-    if password.length < 3
+    if password.strip.empty?
+      flash[:registration_error] = "ERROR: Password can't be blank"
+    elsif password.length < 3
       flash[:registration_error] = 'ERROR: Password must be at least 3 characters'
     elsif password != pwd_confirm
       flash[:registration_error] = 'ERROR: Passwords do not match'

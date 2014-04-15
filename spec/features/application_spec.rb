@@ -131,4 +131,14 @@ feature 'Homepage' do
     click_on 'Register'
     expect(page).to have_content 'ERROR: Password must be at least 3 characters'
   end
+
+  scenario 'Gives error if password is blank' do
+    visit '/'
+    click_on 'Register'
+    fill_in 'Email', with: 'joe@example.com'
+    fill_in 'Password', with: '   '
+    fill_in 'Confirm_Password', with: '   '
+    click_on 'Register'
+    expect(page).to have_content "ERROR: Password can't be blank"
+  end
 end
