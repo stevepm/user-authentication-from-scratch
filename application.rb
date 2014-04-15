@@ -62,9 +62,17 @@ class Application < Sinatra::Application
     if session[:admin]
       users = UserRepository.list_users
       email = session[:email]
-      erb :users, locals: {:users => users,:email => email}
+      erb :users, locals: {:users => users, :email => email}
     else
-      redirect '/'
+      redirect '/error'
     end
+  end
+
+  get '/error' do
+    erb :error
+  end
+
+  not_found do
+    redirect '/error'
   end
 end

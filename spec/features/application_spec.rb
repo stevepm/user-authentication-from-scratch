@@ -85,4 +85,23 @@ feature 'Homepage' do
     expect(current_url).to eq("http://www.example.com/users")
     expect(page).to have_content 'Users'
   end
+
+  scenario 'Non-admins cannot see or access users page' do
+    visit '/'
+    click_on 'Register'
+    fill_in 'Email', with: 'joe@example.com'
+    fill_in 'Password', with: 'Password'
+    click_on 'Register'
+    click_on 'Logout'
+    click_on 'Login'
+    fill_in 'Email', with: 'joe@example.com'
+    fill_in 'Password', with: 'Password'
+    click_on 'Login'
+    expect(page).to have_no_link 'View all users'
+    visit '/users'
+    expect(current_url).to eq("http://www.example.com/error")
+    expect(page).to have_content 'ERROR: 404'
+    click_link 'here'
+    expect(current_url).to eq("http://www.example.com/")
+  end
 end
