@@ -25,6 +25,7 @@ class Application < Sinatra::Application
     email_login = params[:Email_login]
     password_register = params[:Password_register]
     password_login = params[:Password_login]
+    confirm_password = params[:Confirm_Password]
     if email_login && password_login
       if UserRepository.validate_user?(email_login, password_login)
         session[:email] = email_login
@@ -35,14 +36,19 @@ class Application < Sinatra::Application
         redirect '/login'
       end
     else
-      if UserRepository.email_exists?(email_register)
-        flash[:registration_error] = 'Email address is already taken'
-        redirect '/register'
+      if confirm_password == password_register
+        if UserRepository.email_exists?(email_register)
+          flash[:registration_error] = 'Email address is already taken'
+          redirect '/register'
+        else
+          user_email = UserRepository.create(email_register, password_register)
+          session[:email] = user_email
+          session[:admin] = UserRepository.find(user_email).admin
+          redirect '/'
+        end
       else
-        user_email = UserRepository.create(email_register, password_register)
-        session[:email] = user_email
-        session[:admin] = UserRepository.find(user_email).admin
-        redirect '/'
+        flash[:registration_error] = 'ERROR: Passwords do not match'
+        redirect '/register'
       end
     end
   end

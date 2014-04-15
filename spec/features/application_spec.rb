@@ -15,12 +15,14 @@ feature 'Homepage' do
     click_on 'Register'
     fill_in 'Email', with: 'joe@example.com'
     fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
     expect(page).to have_content 'Welcome, joe@example.com'
     click_on 'Logout'
     click_on 'Register'
     fill_in 'Email', with: 'joe@example.com'
     fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
     expect(page).to have_content 'Email address is already taken'
 
@@ -31,6 +33,7 @@ feature 'Homepage' do
     click_on 'Register'
     fill_in 'Email', with: 'joe@example.com'
     fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
     click_on 'Logout'
     expect(page).to have_no_content 'Welcome, joe@example.com'
@@ -43,6 +46,7 @@ feature 'Homepage' do
     click_on 'Register'
     fill_in 'Email', with: 'joe@example.com'
     fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
     click_on 'Logout'
     click_on 'Login'
@@ -59,6 +63,7 @@ feature 'Homepage' do
     click_on 'Register'
     fill_in 'Email', with: 'joe@example.com'
     fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
     click_on 'Logout'
     click_on 'Login'
@@ -73,6 +78,7 @@ feature 'Homepage' do
     click_on 'Register'
     fill_in 'Email', with: 'joe@example.com'
     fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
     DB[:users].where(:email => 'joe@example.com').update(:admin => true)
     click_on 'Logout'
@@ -91,6 +97,7 @@ feature 'Homepage' do
     click_on 'Register'
     fill_in 'Email', with: 'joe@example.com'
     fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
     click_on 'Logout'
     click_on 'Login'
@@ -103,5 +110,14 @@ feature 'Homepage' do
     expect(page).to have_content 'ERROR: 404'
     click_link 'here'
     expect(current_url).to eq("http://www.example.com/")
+  end
+  scenario 'Gives error if passwords dont match' do
+    visit '/'
+    click_on 'Register'
+    fill_in 'Email', with: 'joe@example.com'
+    fill_in 'Password', with: 'Password'
+    fill_in 'Confirm_Password', with: 'other-stuff'
+    click_on 'Register'
+    expect(page).to have_content 'ERROR: Passwords do not match'
   end
 end
