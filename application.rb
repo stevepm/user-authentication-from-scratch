@@ -16,6 +16,12 @@ class Application < Sinatra::Application
     end
   end
 
+  helpers do
+    def h(text)
+      Rack::Utils.escape_html(text)
+    end
+  end
+
   get '/' do
     erb :index, locals: {:email => session[:email], :admin => session[:admin]}
   end
@@ -26,12 +32,27 @@ class Application < Sinatra::Application
     erb :register, :locals => {:error_message => error_message}
   end
 
-  post '/' do
-    email_register = params[:Email_register]
-    email_login = params[:Email_login]
-    password_register = params[:Password_register]
-    password_login = params[:Password_login]
-    confirm_password = params[:Confirm_Password]
+  post '/register' do
+    email_register = h(params[:Email_register])
+    password_register = h(params[:Password_register])
+    confirm_password = h(params[:Confirm_Password])
+    if validate_password?(password_register, confirm_password) && validate_email?(email_register)
+      if UserRepository.email_exists?(email_register)
+        flash[:registration_error] = 'Email address is already taken'
+        redirect '/register'
+      else
+        user_email = UserRepository.create(email_register, password_register)
+        session[:email] = user_email
+        redirect '/'
+      end
+    else
+      redirect '/register'
+    end
+  end
+
+  post '/login' do
+    email_login = h(params[:Email_login])
+    password_login = h(params[:Password_login])
     if email_login && password_login
       if UserRepository.validate_user?(email_login, password_login)
         session[:email] = email_login
@@ -39,19 +60,6 @@ class Application < Sinatra::Application
       else
         flash[:login_error] = 'Invalid Email/Password'
         redirect '/login'
-      end
-    else
-      if validate_password?(password_register,confirm_password) && validate_email?(email_register)
-        if UserRepository.email_exists?(email_register)
-          flash[:registration_error] = 'Email address is already taken'
-          redirect '/register'
-        else
-          user_email = UserRepository.create(email_register, password_register)
-          session[:email] = user_email
-          redirect '/'
-        end
-      else
-        redirect '/register'
       end
     end
   end
@@ -85,7 +93,7 @@ class Application < Sinatra::Application
     redirect '/error'
   end
 
-  def validate_password?(password,pwd_confirm)
+  def validate_password?(password, pwd_confirm)
     valid = false
     if password.strip.empty?
       flash[:registration_error] = "ERROR: Password can't be blank"
