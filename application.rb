@@ -10,6 +10,12 @@ class Application < Sinatra::Application
   enable :sessions
   use Rack::Flash
 
+  before do
+    if session[:email]
+      session[:admin] = UserRepository.find(session[:email]).admin
+    end
+  end
+
   get '/' do
     erb :index, locals: {:email => session[:email], :admin => session[:admin]}
   end
@@ -29,7 +35,6 @@ class Application < Sinatra::Application
     if email_login && password_login
       if UserRepository.validate_user?(email_login, password_login)
         session[:email] = email_login
-        session[:admin] = UserRepository.find(email_login).admin
         redirect '/'
       else
         flash[:login_error] = 'Invalid Email/Password'
@@ -43,7 +48,6 @@ class Application < Sinatra::Application
         else
           user_email = UserRepository.create(email_register, password_register)
           session[:email] = user_email
-          session[:admin] = UserRepository.find(user_email).admin
           redirect '/'
         end
       else
@@ -100,7 +104,7 @@ class Application < Sinatra::Application
     if email.strip.empty?
       flash[:registration_error] = "ERROR: Email can't be blank"
     elsif (email =~ /^(\w\.*)+[@](\w)+\.([a-zA-Z]{2,6})$/) == nil
-      flash[:registration_error] = "ERROR: Email must be valid"
+      flash[:registration_error] = 'ERROR: Email must be valid'
     else
       valid = true
     end

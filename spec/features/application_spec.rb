@@ -154,6 +154,6 @@ feature 'Homepage' do
     fill_in 'Password', with: 'Password'
     fill_in 'Confirm_Password', with: 'Password'
     click_on 'Register'
-    expect(page).to have_content "ERROR: Email must be valid"
+    expect(page).to have_content 'ERROR: Email must be valid'
   end
 end
