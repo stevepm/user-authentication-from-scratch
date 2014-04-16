@@ -1,9 +1,5 @@
 <div class="form-wrapper">
-
-
-
-
-  <form action="<%= request.base_url %>" method="post">
+  <form action="/register" method="post">
     <table>
       <tr><td></td><td><h1>Register</h1></td></tr>
       <tr><td></td><td><p id="error"><%= error_message %></p></td></tr>
@@ -12,7 +8,5 @@
       <tr><td>Confirm Password:</td> <td><input type="password" name="Confirm_Password" placeholder="Confirm Password"></td></tr>
       <tr><td></td><td><input type="submit" value="Register"></td></tr>
     </table>
-
-
   </form>
 </div>
